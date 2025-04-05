@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
@@ -57,6 +57,18 @@
     <button id="startButton">Dar Partida 🚗</button>
     <div id="speedometer">0 km/h</div>
     <button id="cameraButton">Câmera Livre 🎥</button>
+
+    <div id="touchControls" style="display: none">
+      <div class="arrow-keys">
+        <button id="leftButton">⬅️</button>
+        <button id="rightButton">➡️</button>
+      </div>
+      <div class="action-buttons">
+        <button id="accelerateButton">⬆️</button>
+        <button id="brakeButton">⬇️</button>
+      </div>
+    </div>
+
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

@@ -3,13 +3,13 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
 import { Controls } from './controls'
 import { Game } from './game'
+import './style.css'
 
 const game = new Game()
 let car: THREE.Group | undefined = undefined
-let wheels: THREE.Object3D[] = []
-let headlights: THREE.SpotLight[] = []
-let taillights: THREE.PointLight[] = []
-let orbitControls: OrbitControls
+const wheels: THREE.Object3D[] = []
+const headlights: THREE.SpotLight[] = []
+const taillights: THREE.PointLight[] = []
 let isOrbitControlActive = false
 const GRAVITY = 0.015
 const GROUND_LEVEL = 0
@@ -36,7 +36,7 @@ const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true })
 renderer.setSize(window.innerWidth, window.innerHeight)
 document.body.appendChild(renderer.domElement)
 
-orbitControls = new OrbitControls(camera, renderer.domElement)
+const orbitControls = new OrbitControls(camera, renderer.domElement)
 orbitControls.enableDamping = true
 orbitControls.enabled = false
 orbitControls.minDistance = 8
@@ -76,7 +76,7 @@ const groundGeometry = new THREE.PlaneGeometry(WORLD_SIZE * 2, WORLD_SIZE * 2)
 const groundMaterial = new THREE.MeshStandardMaterial({
   map: groundTexture,
   roughness: 0.8,
-  metalness: 0.2,
+  metalness: 0.2
 })
 const ground = new THREE.Mesh(groundGeometry, groundMaterial)
 ground.rotation.x = -Math.PI / 2
@@ -85,7 +85,7 @@ scene.add(ground)
 const createBarrier = (x: number, z: number, width: number, height: number) => {
   const geometry = new THREE.BoxGeometry(width, BARRIER_HEIGHT, height)
   const material = new THREE.MeshBasicMaterial({
-    visible: false,
+    visible: false
   })
   const barrier = new THREE.Mesh(geometry, material)
   barrier.position.set(x, BARRIER_HEIGHT / 2, z)
@@ -97,7 +97,7 @@ const barriers = [
   createBarrier(0, -WORLD_SIZE, WORLD_SIZE * 2, 1),
   createBarrier(0, WORLD_SIZE, WORLD_SIZE * 2, 1),
   createBarrier(-WORLD_SIZE, 0, 1, WORLD_SIZE * 2),
-  createBarrier(WORLD_SIZE, 0, 1, WORLD_SIZE * 2),
+  createBarrier(WORLD_SIZE, 0, 1, WORLD_SIZE * 2)
 ]
 
 const controls = new Controls(game)
@@ -174,7 +174,7 @@ loader.load(
 
 camera.position.set(0, 2, 5)
 
-function checkCollision(_newPosition: THREE.Vector3): boolean {
+function checkCollision(): boolean {
   const carBox = new THREE.Box3().setFromObject(car!)
 
   for (const barrier of barriers) {
@@ -285,7 +285,7 @@ function animate(): void {
         const currentPosition = car.position.clone()
         car.translateZ(-speed)
 
-        if (checkCollision(car.position)) {
+        if (checkCollision()) {
           car.position.copy(currentPosition)
           speed = -speed * BOUNCE_FACTOR
           car.translateZ(-speed)
@@ -366,4 +366,50 @@ window.addEventListener('resize', () => {
   renderer.setSize(window.innerWidth, window.innerHeight)
   camera.aspect = window.innerWidth / window.innerHeight
   camera.updateProjectionMatrix()
+})
+
+function isMobileDevice(): boolean {
+  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+    navigator.userAgent
+  )
+}
+
+const touchControls = document.getElementById('touchControls') as HTMLDivElement
+if (isMobileDevice()) {
+  touchControls.style.display = 'flex'
+}
+
+const leftButton = document.getElementById('leftButton') as HTMLButtonElement
+const rightButton = document.getElementById('rightButton') as HTMLButtonElement
+const accelerateButton = document.getElementById(
+  'accelerateButton'
+) as HTMLButtonElement
+const brakeButton = document.getElementById('brakeButton') as HTMLButtonElement
+
+leftButton.addEventListener('touchstart', () => {
+  controls['keys']['a'] = true
+})
+leftButton.addEventListener('touchend', () => {
+  controls['keys']['a'] = false
+})
+
+rightButton.addEventListener('touchstart', () => {
+  controls['keys']['d'] = true
+})
+rightButton.addEventListener('touchend', () => {
+  controls['keys']['d'] = false
+})
+
+accelerateButton.addEventListener('touchstart', () => {
+  controls['keys']['w'] = true
+})
+accelerateButton.addEventListener('touchend', () => {
+  controls['keys']['w'] = false
+})
+
+brakeButton.addEventListener('touchstart', () => {
+  controls['keys']['s'] = true
+})
+brakeButton.addEventListener('touchend', () => {
+  controls['keys']['s'] = false
 })

@@ -1,0 +1,26 @@
+#touchControls {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.arrow-keys,
+.action-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.arrow-keys button,
+.action-buttons button {
+  padding: 15px;
+  font-size: 24px;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}

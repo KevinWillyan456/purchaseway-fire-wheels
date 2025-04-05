@@ -6,7 +6,7 @@ export class Controls {
     a: false,
     s: false,
     d: false,
-    e: false,
+    e: false
   }
 
   constructor(private game: Game) {
